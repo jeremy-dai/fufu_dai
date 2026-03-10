@@ -1,0 +1,26 @@
+# Jeremy Dai
+
+> AI Engineer based in Shanghai. Building RAG & Agent systems in production.
+
+## About
+Jeremy Dai is an AI Engineer at KAWO, building Kevin — an AI marketing agent serving 500+ global enterprise brands. Previously at txyz.ai (AI research startup, 500K+ users) and Accenture Netherlands where he led a team of 8 on AI digitization of 30 million Holocaust documents from the Arolsen Archives (UNESCO Memory of the World). That project won the V360 Global Innovation Award and produced 2 NLP patents.
+
+Background spans traffic engineering (US/Canada), MSc Statistics (Leiden University, graduated ahead of schedule), and MSc Civil Engineering (Texas A&M). Lived in 4 countries.
+
+## Core Skills
+- LLM/AI: LangChain, LangGraph, RAG, Multi-Agent Systems, Prompt Engineering, MCP
+- NLP: LayoutLM, CRF, OCR, Text Classification
+- Stack: Python, TypeScript, React, Next.js, Docker, PostgreSQL
+
+## Key Projects
+- **Arolsen Archives**: AI digitization of 30M Nazi persecution records. 40x productivity increase. 2 NLP patents. V360 Innovation Award.
+- **Kevin (KAWO)**: AI marketing agent for 500+ enterprise brands. Multi-agent on LangGraph + Qwen.
+- **hi-time & hi-money**: Personal productivity tools turning life data into AI-processable text.
+
+## Contact
+- GitHub: jeremy-dai
+- LinkedIn: linkedin.com/in/jeremydai
+- Zhihu: zhihu.com/people/jieruimi
+- Xiaohongshu: xiaohongshu.com/user/profile/6399c49b0000000026007957
+- Email: jeremyydai@gmail.com
+- Website: fufu.dev

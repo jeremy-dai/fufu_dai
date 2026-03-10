@@ -1,0 +1,78 @@
+---
+title: "Why AI Is Making You More Exhausted, Not Less"
+description: "A Harvard study tracked 200 tech workers for 8 months and found AI made them more burned out, not less. The root cause isn't AI itself — it's that AI rewrote the cost structure of work, but our decision-making hasn't caught up."
+date: "2026-02-26"
+tags: ["AI", "Productivity", "Career"]
+lang: "en"
+published: true
+---
+
+Harvard Business Review recently published a study that hit close to home. They tracked 200 tech workers over eight months and found that after adopting AI tools, people weren't less stressed — they were more burned out than before.
+
+Three patterns emerged. First, workers started taking on jobs that weren't theirs: PMs writing code, designers pulling their own data, one person quietly doing the work of three. Second, the line between work and personal time dissolved — because firing off a prompt doesn't *feel* like work, people were doing it at lunch, before bed, in the bathroom. Third, senior engineers found themselves drowning in cleanup work, fixing AI-generated code that junior colleagues had shipped without understanding.
+
+The researchers called it "work scope creep." I think the observation is sharp, but the explanation stops short.
+
+These 200 people weren't naive. They weren't being coerced — the study explicitly notes AI adoption was voluntary. So why would a group of smart professionals willingly work themselves into the ground?
+
+## The Invisible Price List
+
+To understand what's happening, you need to think about a mental model most of us carry without realizing it: an internal price list.
+
+This isn't a list of what things cost in dollars. It's a running estimate of what things cost in *effort*. Writing a data analysis script: maybe two hours. Mocking up a design: half a day. Building a backend API: a full day. These numbers accumulate from years of experience and become intuition — background knowledge that runs automatically.
+
+This price list is what makes specialization rational. A PM doesn't write her own code not because she can't learn to, but because her internal estimate says: "figuring out Python + writing the script + debugging = three days of my time. Asking the engineer = five minutes." The math is obvious. Same reason engineers don't design their own UI — the price list says it's too expensive to bother.
+
+The price list is, in effect, a decision filter. It automatically screens out the things that aren't worth doing, letting you concentrate on work where you actually have an edge. This is comparative advantage in practice — and the price list is what makes it work.
+
+Then AI arrived and repriced almost everything.
+
+Scripts that took two hours now take five minutes. Design mockups that took half a day are now three sentences in a prompt. API endpoints that took a full day are done in twenty minutes.
+
+The price list updated. The decision filter didn't.
+
+When the cost of doing something drops close to zero, the mechanism that used to screen out tasks stops working. The PM's internal filter used to block "write the code yourself" before she even consciously considered it. Now the price list says "this is a five-minute thing" and the filter waves it through. So she writes the code. Then notices that running a data analysis would also only take five minutes. Then realizes she could generate the team's flow diagrams herself with a few prompts.
+
+Each individual decision looks reasonable. The sum is what the study calls creep — you're a frog in slowly heating water, adding one small thing at a time, each addition feeling negligible, until you realize you can't stand up.
+
+The blurring of work-life boundaries follows the same logic. You wouldn't open your IDE at midnight because the old price list said that's a minimum one-hour commitment — too expensive. But a prompt costs almost nothing on the updated list. You don't even register it as work. It's just "a quick question." Your brain disagrees. Every "quick question" keeps your cognitive engine running on standby, burning energy that was supposed to go toward rest.
+
+And senior engineers cleaning up AI-generated code? That's a textbook cost-structure imbalance: AI drove code generation costs to nearly zero, but code review costs didn't move. Production gets cheap and fast; quality control stays expensive and slow. The result is more garbage, and the same number of people who have to clean it up.
+
+Three different symptoms, one underlying cause: AI changed the cost structure of action, but our decision-making frameworks are still running on the old price list. We're executing at new prices while reasoning with old ones.
+
+## Rebuilding the Decision Framework
+
+If that's the diagnosis, what's the treatment?
+
+**First: separate "can do" from "should do."**
+
+This sounds obvious and is surprisingly hard in practice. AI has made nearly everything "doable." But doable has never meant worth doing. A PM who can use Cursor to ship working code doesn't mean she *should* spend her time doing it. The right question isn't "can AI help me do this?" It's "is this something I should be doing at all?"
+
+A useful heuristic: if completing a task doesn't meaningfully advance your core responsibilities or KPIs, it shouldn't be on your plate — no matter how cheap it's become. Cost is not a justification. Value is.
+
+**Second: match your quality control investment to your production volume.**
+
+When an intern produces ten reports in a day that would have taken a week before, you don't skip review — you review more carefully, because the stakes of something slipping through are now higher. AI is the same. When you or your team use AI to generate code, documentation, or analysis at scale, someone has to own the quality of those outputs.
+
+Practically, this means deciding how you'll validate before you scale production. Have AI generate tests alongside the code. Use a second model instance to cross-check outputs. At minimum, build in human review for anything that matters. Don't let a gap open up between how fast you produce and how carefully you verify.
+
+**Third — and this is the core of it: use the time you've saved to think, not to execute more.**
+
+AI compressing execution costs to near zero is a genuine gift. It means you can finally spend less time on *how* to do things and more time on *what* to do and *why*. That's a rare opportunity.
+
+The workers in the study did the opposite. They reinvested every saved hour back into more execution. It's like winning the lottery and spending the money on more lottery tickets.
+
+Being genuinely AI-native isn't about doing more things. It's about doing fewer, better-chosen things — and using the reclaimed time to think about whether you're heading in the right direction, whether you're solving the real problem, whether there's a better path you haven't seen yet.
+
+## The Older Problem
+
+The Harvard study isn't really about AI. It's about something older: when constraints disappear, most people don't know what to do with the freedom.
+
+Think of someone who's spent years working in a cubicle. Put them in an open field with no walls and no instructions, and the instinct isn't to run freely — it's anxiety. Which direction do I go? So the default response is: find something to do. Anything. As long as your hands are busy, you can't be accused of being lazy.
+
+That's the paradox of the AI era. AI eliminated scarcity at the execution layer. It exposed scarcity at the judgment layer. We used to be too busy to think. Now we have the time, and we discover we're not sure what to think about. So we fill the emptiness with more execution.
+
+The answer isn't to use AI less or use it more. It's to update your internal price list — not just the prices for doing things, but the price you put on making good decisions. On your revised list, execution should be the cheapest item. Judgment, direction, and the ability to say no should be the expensive ones.
+
+When execution costs almost nothing, knowing what not to execute is the rarest skill of all.

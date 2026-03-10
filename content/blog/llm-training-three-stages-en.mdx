@@ -1,0 +1,70 @@
+---
+title: "LLM Training Isn't Alchemy. It's a Three-Stage Rocket."
+description: "Most people think training a large language model means feeding it data, tuning hyperparameters, and hoping for the best. The reality is an entirely different class of engineering — and the stage everyone obsesses over matters the least."
+date: "2026-02-22"
+tags: ["LLM", "AI"]
+lang: "en"
+published: true
+---
+
+The mental model most people have for LLM training goes something like: dump in data, adjust some knobs, get a smart model out. That picture might have been accurate in 2020.
+
+What the industry actually does today is something else entirely. The math hasn't changed — it's still gradient descent on next-token prediction — but the engineering around it has grown into a different organism. The gap between fine-tuning a ResNet on a single GPU and training a frontier model is roughly the gap between setting off fireworks and launching a rocket.
+
+The frame I find most useful: modern LLM training is a three-stage rocket. Each stage has a distinct mathematical objective, a different data strategy, and its own failure modes. And the most counterintuitive part — the stage everyone talks about the most (fine-tuning) is, in a real sense, the least important.
+
+## Stage One: Pre-training — Compressing the Internet
+
+The job here is blunt: take an astronomical amount of text and compress its statistical structure into model weights. Mathematically, you're minimizing negative log-likelihood. It's a lossy information compression problem at scale.
+
+Sounds simple. The hardest problems in LLM engineering live here.
+
+**More data isn't always better — it depends on when.** There's a well-documented tail effect in pre-training. During the final annealing phase, the model becomes dramatically more sensitive to data quality. You can feed it trillions of tokens of noisy web text early on and it absorbs the signal fine. But low-quality data in the last 1% of training can directly cap the model's ceiling. This is why production pre-training runs use curriculum learning — rough, high-volume data to establish foundations, then a carefully curated high-quality set for the final push.
+
+At the scale of tens of thousands of GPUs, you stop dealing with software problems and start dealing with physics. Meta's Llama 3 training used 16,384 H100s and logged 466 job interruptions over 54 days — 419 of them unexpected, 78% caused by hardware failure. That's a crash roughly every three hours.
+
+One of the nastiest failure modes is **silent data corruption (SDC)**: a GPU produces wrong results without throwing an error. Loss curves look perfectly healthy. Gradient precision is quietly rotting. Google reported similar events during Gemini training — roughly one SDC incident every week or two.
+
+At this scale, the engineering challenge isn't really about algorithms anymore. It's about keeping physical infrastructure stable. Cosmic rays flipping bits in memory chips. Ten thousand GPUs executing a synchronized workload so large that the power draw spike causes voltage fluctuations across the entire data center. The cost and effort of maintaining physical stability often exceeds the cost of the compute itself.
+
+## Stage Two: Mid-training — The Stage Nobody Writes About
+
+This is the most underrated phase of the whole pipeline. You'll barely find it mentioned in papers — Allen AI's OLMo 2 report in 2025 was one of the first to formally name it — but every major lab runs some version of it.
+
+Mid-training does two things:
+
+**First, extend the context window.** Going from 4K to 128K tokens isn't something you can do in pre-training — long-document distributions are too different from typical web text. The standard approach involves adjusting RoPE base frequency and annealing on long-context data, but it requires its own dedicated phase.
+
+**Second, inject hard reasoning capabilities.** Coding and math are best taught here, not in fine-tuning. The reason is subtle: after pre-training, the model has a stable "world model" — a rich internal representation built on general text. Mid-training can shift the data distribution toward technical domains while staying within that existing representational structure. Fine-tuning is too late. By that point, you're trying to teach advanced calculus to someone who already graduated — possible, but inefficient, and you risk degrading what they already know.
+
+NVIDIA research found that introducing reasoning data during pre-training rather than post-training led to up to 19% better performance on expert-level benchmarks. Miss the window, and no amount of later fine-tuning fully closes the gap.
+
+Mid-training is the bridge between general language understanding and specialized capability. Most popular explanations of LLM training skip straight from pre-training to fine-tuning and miss this entirely.
+
+## Stage Three: Post-training — Learning to Talk, Not to Think
+
+This is the stage with the most coverage and, arguably, the most misunderstanding.
+
+In 2023, Meta's LIMA paper introduced what they called the **Superficial Alignment Hypothesis**: almost everything a model knows was learned during pre-training. Fine-tuning (SFT) doesn't teach new knowledge — it teaches the model how to present what it already knows. The style of response, not the substance.
+
+Their experiment was striking: 1,000 carefully curated examples fine-tuned a 65B LLaMA model to outperform RLHF-trained DaVinci003 on human preference benchmarks. One thousand examples beating millions of annotations.
+
+Follow-up work at ICLR 2024 made the point more rigorously. Comparing token distributions between base and aligned models, the researchers found rankings were nearly identical across almost all token positions. The biggest distribution shifts were concentrated in stylistic tokens: "Hello," "Thank," "However," "Remember." The model's knowledge structure was essentially untouched.
+
+Fine-tuning, in other words, is wardrobe selection. The model already knows what to say; SFT tells it how to dress when it walks out the door.
+
+This explains why aggressive fine-tuning can backfire. Push SFT too hard and you get **mode collapse** — the model's output distribution collapses toward a narrow style and loses the diversity it built during pre-training. That's why the field has largely shifted focus toward RLHF methods like PPO and DPO: rather than teaching through examples, they surgically trim the tail of the output distribution — cutting harmful and low-quality generation paths while leaving the rest of the distribution intact.
+
+## Why This Framework Matters
+
+You're probably not training a frontier model. But understanding this three-stage structure changes how you interpret everything else in the field.
+
+When someone says "LLMs are just brute-force statistics on massive compute," they're not wrong about the components. But they're missing the engineering — which is where the actual hard problems live.
+
+The real moats in frontier AI aren't architectural anymore. They're:
+
+- **Data curation** — knowing exactly what to feed the model, in what order, at what ratio
+- **Systems reliability** — keeping a building-sized computer running continuously for months
+- **Evaluation rigor** — building benchmarks that can't be gamed and actually measure what you care about
+
+It's precision systems engineering, not magical parameter tuning. Knowing how the rocket is staged helps you tell the difference between a real insight about AI capability and someone arguing about what color to paint the engine bell.

@@ -1,0 +1,95 @@
+---
+title: "Why Your RAG Can't Find What You're Looking For"
+description: "A brand manager couldn't find an article that was definitely in the database. The problem wasn't a bug — it was an economics problem hiding inside a technical one."
+date: "2026-02-25"
+tags: ["RAG", "AI", "Engineering"]
+lang: "en"
+published: true
+---
+
+## The Search That Returned Nothing
+
+One of our clients is a large consumer brand. Like most brands their size, they run a dozen or more social accounts across WeChat, Weibo, Douyin, and Xiaohongshu simultaneously, publishing hundreds of pieces of content every month. After a few years of this, their content library easily contains tens of thousands of posts. Part of what we built for them was a way for brand managers to quickly search that library.
+
+One day, a manager was looking for a WeChat article they'd published during last year's Double 11 shopping festival — specifically, a long-form piece about skincare ingredients. The article existed. We had indexed it. But when he searched "ingredient-focused skincare," our vector search returned nothing useful.
+
+My first instinct was to check the index, tweak the chunking strategy, fiddle with the embedding model. I spent a while going in circles. Then it clicked: this wasn't an engineering bug. It was an economics problem.
+
+## The Invisible Price List
+
+To understand what went wrong, you have to understand what single-vector embedding actually does to a document.
+
+When you feed a piece of text into an embedding model, it performs an act of violent compression: it takes hundreds of words of rich, multi-topic content and squashes it down into a single fixed-length vector. One point in high-dimensional space. No matter how complex the document, no matter how many distinct ideas it contains — one point.
+
+That WeChat article was a typical brand long-form: the first half covered skincare ingredients and science, the middle wove in brand history and sustainability values, and the end wrapped up with product recommendations and Double 11 promotions. All four of those themes got blended together in the embedding blender. The resulting vector didn't strongly represent any of them — it landed somewhere in the vague middle of the space between them. When the brand manager searched for something precise, the mixed-up vector was just too far away to be retrieved.
+
+**The whole washes out the parts.**
+
+This is almost unavoidable with brand content. A single post rarely covers just one topic. WeChat articles routinely mix brand philosophy, product positioning, promotional copy, and user stories in the same piece. That's exactly the kind of content where single-vector retrieval quietly fails.
+
+For a long time I thought this was an embedding model problem — the model wasn't "smart enough." But that's not really right. The model is doing what it was designed to do. The constraint isn't intelligence; it's cost.
+
+One document, one vector: a few kilobytes. One document, one vector *per token*: 50 to 100x more storage. When we were dealing with millions of posts, a few dozen gigabytes of index would have ballooned into multiple terabytes. The math didn't work. So the design decision was made — consciously or not — to throw away the fine-grained semantic information in exchange for something affordable.
+
+There's an invisible price list embedded in every technical architecture decision. Keeping full token-level semantics: too expensive. Inflating the index to avoid the averaging problem: not worth it. Paying 50x in storage to get precise local matching: out of the question.
+
+The honest version: we couldn't afford high resolution, so we settled for lossy compression and told ourselves it was good enough.
+
+## Three Ways to Decompress
+
+Once you frame the problem as a cost constraint rather than a technical limitation, the solution space gets clearer. The question becomes: as the constraint relaxes, what's worth buying back? Over the past couple of years, the RAG field has converged on three distinct strategies, each recovering a different type of lost information.
+
+### Strategy 1: Keep Token-Level Semantics — Late Interaction
+
+The most intuitive fix: if squashing everything into one vector loses information, don't squash everything into one vector.
+
+ColBERT is the canonical implementation. Instead of one vector per document, it produces one vector per token. "Ingredient" stays "ingredient." "Double 11" stays "Double 11." They don't get averaged together. At query time, instead of comparing one vector against another, the query interacts with every token vector in the document individually — a mechanism called late interaction. You get precise local matching rather than a collision with an averaged wall.
+
+The tradeoff is real: 50 to 100x storage overhead. ColBERT v2 uses residual compression to bring that number down considerably, but at the scale of millions of posts, it's still a meaningful cost commitment. The question is whether the precision is worth the price — and for multi-topic brand content, it often is.
+
+### Strategy 2: Keep Document Structure — Visual Tree Search
+
+Late interaction fixes the semantic averaging problem within a document. But there's a second type of information that traditional RAG pipelines throw away entirely: layout.
+
+A WeChat long-form has a title, subheadings, body paragraphs, and image captions. A brand's annual marketing report has a table of contents, chapters, data tables, and appendices. Standard chunking not only ignores all of this; it frequently splits a coherent argument halfway through. That's not just information loss — it's structural destruction.
+
+Approaches like PageIndex take a different starting point: abandon text chunking altogether. Instead, a multimodal vision model reads documents as images, preserving all layout and hierarchy. The document becomes a structured tree of sections and pages. At retrieval time, an LLM agent navigates that tree through logical reasoning, drilling down to specific pages and reading the original images directly.
+
+The strength here is precision on structured long documents and near-zero hallucination — you can trace every answer back to an exact page. The upfront cost is heavier (vision parsing, tree construction), but retrieval itself is surprisingly cheap because you're navigating to the right place rather than pulling in context from everywhere.
+
+### Strategy 3: Keep Cross-Document Relationships — GraphRAG
+
+The first two strategies optimize within individual documents. But some questions can't be answered by any single document, no matter how well you retrieve it.
+
+Imagine a brand director asking: "Across all our Xiaohongshu posts from the past year that mentioned competitor comparisons, is there any correlation with actual sales numbers?" That question spans hundreds of posts and multiple data sources. Per-document vector matching, however precise, can't help.
+
+Microsoft's GraphRAG is designed for exactly this. During indexing, it uses an LLM to aggressively extract entities and relationships across the entire corpus and builds a knowledge graph. At query time, community detection on that graph surfaces relevant subgraphs of related nodes — enabling the kind of cross-document global synthesis that flat vector search can't touch.
+
+The power is real. When you need a bird's-eye view across a large body of content, this approach is in a different category. The cost is also in a different category: enormous token consumption during graph construction, and updates to the underlying documents can require significant portions of the graph to be rebuilt.
+
+## Cheap Precision Doesn't Exist
+
+Laying these three strategies side by side, a clear picture emerges. They're not competing alternatives — they're a spectrum from cheap-and-fuzzy to expensive-and-precise, and from local to global scope.
+
+Single-vector retrieval is the left end of the spectrum: lowest cost, highest information loss. Late interaction buys back token-level semantics at the cost of storage. PageIndex buys back document structure at the cost of upfront parsing. GraphRAG buys back cross-document relationships at the cost of massive token consumption.
+
+Each step to the right is paying for a specific type of information that was previously thrown away — not because that information wasn't valuable, but because the old cost structure made it unaffordable. The cost structure is changing. Storage is getting cheaper. Inference is getting cheaper. Model capability is improving. The information that was previously too expensive to keep is being bought back, piece by piece.
+
+This reframes the question "which RAG approach is best?" The right question is: **in your specific context, which type of lost information costs you the most?**
+
+- Short, single-topic content — product titles, brief social posts — single-vector retrieval is probably fine. Paying more for precision is wasteful.
+- Multi-topic long-form brand content, like WeChat articles mixing product info with brand storytelling, late interaction or hybrid search likely gives you the best return.
+- Heavily structured documents — contracts, financial reports, prospectuses — preserving the original structure is worth the investment.
+- Questions that require connecting the dots across hundreds of separate documents, GraphRAG's cost becomes justified.
+
+This isn't a technical architecture decision. It's a capital allocation decision. You're deciding which kind of precision is worth paying for.
+
+## Don't Let Your Data Become Average
+
+This whole episode reinforced something I keep learning in different contexts: the technical choices we treat as defaults are rarely the technically optimal ones. They're the economically optimal ones for a particular cost structure. When the cost structure shifts, the optimal choice shifts too.
+
+We're in one of those windows right now. Storage, inference, and model capability are all declining in cost, on different curves and at different speeds. The invisible price list is being revised every few months. What was prohibitively expensive last year may be the obvious choice today.
+
+The work isn't to master a fixed set of best practices. It's to periodically look at the price list and ask whether the numbers have changed.
+
+When precision stops being a luxury, stop letting your data disappear into the average.

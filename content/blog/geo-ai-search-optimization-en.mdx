@@ -1,0 +1,133 @@
+---
+title: "AI Search Traffic Is Up 527%. Here's How to Get Cited."
+description: "Traditional SEO is losing ground as AI answers replace search clicks. This is a practical guide to GEO — making ChatGPT, Perplexity, and Claude actually cite your content."
+date: "2026-02-27"
+tags: ["AI", "Marketing"]
+lang: "en"
+published: true
+---
+
+Your SEO is working. You're ranking on page one. But something has changed: users are skipping your link entirely and asking ChatGPT instead. ChatGPT answers their question. The citation goes to someone else.
+
+This isn't hypothetical. AI search referral traffic grew 527% in the first five months of 2025. At the same time, click-through rates on traditional search results dropped as much as 58% due to AI Overviews. If your content isn't getting cited by AI engines, you're missing the fastest-growing traffic channel right now.
+
+This is the playbook for GEO — Generative Engine Optimization.
+
+## How AI Decides What to Cite
+
+Every AI search engine follows roughly the same pipeline: user asks a question → AI breaks it into sub-queries → retrieves candidate pages → extracts the best passages → assembles an answer with citations.
+
+There are four points where you can intervene: getting indexed (visibility), getting your passages selected (structure), getting accurately paraphrased (precision), and being considered trustworthy enough to cite (authority). Everything below is about one of these four things.
+
+## Step 1: Technical Foundation (30 Minutes)
+
+The highest ROI work, and the most commonly skipped.
+
+**Allow AI crawlers in robots.txt**
+
+Make sure none of these are blocked:
+
+- OAI-SearchBot (ChatGPT search — most important)
+- ChatGPT-User (ChatGPT browse mode)
+- PerplexityBot
+- Claude-User (user-triggered fetches)
+- Google-Extended (Gemini / AI Overview)
+- Bingbot (Copilot)
+
+One useful nuance: you can block ClaudeBot (used for training data collection) while allowing Claude-User (used when actual users ask Claude to look something up). You're opting out of training while staying in the citation pool.
+
+**Deploy llms.txt**
+
+Introduced in late 2024, this is essentially a structured menu of your site for AI systems. Drop it in your root directory as plain Markdown:
+
+```
+# Your Brand
+> One sentence: who you are and what you do.
+
+## Core Products
+- [Product A](URL): brief description
+
+## Documentation
+- [Technical Docs](URL): description
+```
+
+If you have extensive documentation, consider an llms-full.txt that consolidates everything into one Markdown file. Models like Claude reason better over unified datasets than scattered HTML pages.
+
+**Add Schema markup (JSON-LD)**
+
+AI engines index entities — people, organizations, concepts — not just keywords. Schema is how you formally declare what you are. Pages with proper Schema markup get 30-40% better visibility in AI results.
+
+Prioritize: Article, FAQPage (Perplexity loves this), HowTo, and Person with sameAs linking the author to LinkedIn or GitHub.
+
+**Ensure server-side rendering**
+
+Critical content needs to be in the initial HTML response. AI crawlers are not good at executing JavaScript-heavy client-side rendering. Target under 2 seconds load time — Copilot has a documented threshold.
+
+## Step 2: Content Structure
+
+This is where the leverage is. Princeton's GEO study (KDD 2024) ran controlled tests on nine optimization techniques. The results were clear: citing authoritative sources (+40% citation rate), adding statistics (+37%), and including expert quotes (+30%) were the biggest movers. Keyword stuffing actually *decreased* citation rates by 10%.
+
+**Four rules for AI-citable writing:**
+
+**Put the conclusion first.** 44.2% of AI citations come from the first third of an article. Open every important page with a 50-100 word TL;DR that gives the answer directly. The first sentence of every section should be the takeaway. The optimal passage length for AI extraction is 40-60 words — one idea per paragraph.
+
+**Write headers as questions.** 78.4% of question-related citations reference the heading itself. Rewrite your H2s and H3s as questions your readers would actually type: "What is X?" "How does X work?" "X vs Y — what's the difference?" This directly mirrors how AI systems decompose user queries.
+
+**Make each paragraph self-contained.** Every paragraph should be citable without the surrounding context. Avoid phrases like "as mentioned above" — they break when extracted. AI pulls passage-level chunks, not whole articles.
+
+**Use definitive language.** Text using "X is" or "X refers to" gets cited at roughly twice the rate of hedged or vague phrasing. Aim for the tone of a good analyst note: factual, specific, a mix of data and interpretation. Not a sales pitch, not a research paper.
+
+**Content types that get cited, ranked:**
+
+Comparison articles (X vs Y) account for roughly 33% of citations — by far the most citable format. Authority guides (15%), original research and data (12%), and ranked lists (10%) follow. What AI won't cite: generic posts without structure, marketing fluff, paywalled content, anything without a date or author.
+
+## Step 3: Platform-Specific Strategy
+
+Each AI engine has different backends and different preferences. Optimizing without knowing which is which means wasted effort.
+
+**ChatGPT** runs on Bing's index. The most important insight: content that *looks like* how ChatGPT answers questions gets cited at much higher rates — this structural similarity accounts for 55% of citation weight, dwarfing domain authority (12%). Study how ChatGPT formats responses, then write your content that way. Freshness matters a lot: content updated within 30 days gets cited 3.2x more often. Anything you're competing for should be refreshed at least monthly.
+
+**Perplexity** draws from its own index plus Google. The biggest differentiator is FAQPage Schema and public PDFs. If you have white papers or research reports, make them publicly downloadable — Perplexity strongly prefers citing PDFs. It also rewards high publishing frequency and tight, self-contained paragraphs.
+
+**Claude** uses Brave Search as its backend — not Google, not Bing. That means you need to verify your content is indexed at search.brave.com before anything else. Claude is highly selective: it processes a lot but cites sparingly, favoring the most factually accurate sources. Optimize for information density: specific numbers, named sources, dated statistics.
+
+**Gemini / AI Overview** runs on Google's index and Knowledge Graph. Its distinctive behavior is "fan-out queries" — it automatically decomposes a question into multiple sub-queries. You want topical depth: a cluster of content covering a subject from multiple angles, with FAQ sections addressing each sub-question. Schema markup has the highest leverage here (+30-40%).
+
+**Copilot** is pure Bing, with extra weight given to LinkedIn and GitHub content. Submit through Bing Webmaster Tools and use the IndexNow protocol for faster indexing.
+
+**Grok** has exclusive access to the full X (Twitter) firehose. Reply quality and depth account for over 75% of post ranking — a substantive reply outweighs a like by 50x. One trap: putting external links in the main post drops your score by about 50%. Links should go in replies only.
+
+## Step 4: Build Third-Party Presence
+
+Here's the number most people miss: brands get cited through third-party sources at 6.5x the rate of their own websites.
+
+Optimizing only your own site is playing half the game. You need a presence where AI engines already look:
+
+- **Wikipedia**: 7.8% of ChatGPT citations. Make sure your entry is accurate and current.
+- **Reddit**: 33% of AI citations come from here. OpenAI has a direct data partnership with Reddit. Community consensus is one of ChatGPT's primary citation signals.
+- **Review sites** (G2, Capterra): Perplexity relies heavily on these for product comparisons.
+- **YouTube**: High citation rate in Google AI Overviews — upload proper subtitle files.
+
+On Reddit, the play is genuine participation in relevant communities, not promotion. You want your brand to appear organically in high-karma threads, in discussions where it actually belongs. That's what gets pulled into AI responses.
+
+## Step 5: Measure and Iterate
+
+The minimum viable monitoring loop is weekly. Maintain 30-80 fixed prompts covering brand definitions, competitor comparisons, and use case questions. Run them through ChatGPT, Perplexity, and Google. Track: are you mentioned? Is there a citation with a link? Which URL? Is the description accurate?
+
+Useful prompt templates:
+- "What is [your brand] and who is it best for? Include sources."
+- "[Your brand] vs [competitor] — when should I choose each? Cite sources."
+
+In Google Analytics, watch utm_source=chatgpt.com (OpenAI appends this automatically) and referral traffic from Perplexity and other AI domains.
+
+## Where to Start
+
+If you have a weekend, here's the priority order:
+
+**Day one — technical foundation:** Update robots.txt, deploy llms.txt, add Schema to your core pages. One-time work, two hours maximum, but without it everything else gets a 30-40% haircut.
+
+**Day two — content overhaul:** Pick your three to five most important pages. Add a TL;DR block at the top. Rewrite headers as questions. Audit each paragraph for self-containment. Add statistics and named sources anywhere you can.
+
+**Ongoing:** Monthly content refreshes on competitive topics. Consistent third-party presence building. Weekly prompt monitoring.
+
+GEO is a long game, same as SEO. The difference is that most people haven't started yet — and compounding works best when you're early.

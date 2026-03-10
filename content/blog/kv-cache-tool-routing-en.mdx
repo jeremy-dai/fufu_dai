@@ -1,0 +1,61 @@
+---
+title: "I Was Accidentally Donating to Cloud Providers"
+description: "I built a smart tool-filtering system for my AI agent to cut costs. Turns out I was silently nuking my KV cache on every request. Here's what Claude Code does instead."
+date: "2026-03-08"
+tags: ["Agent", "LLM", "Engineering"]
+lang: "en"
+published: true
+---
+
+When I first built my AI agent, I did what felt natural: dump every tool's JSON schema into the system prompt and let the model figure it out.
+
+It did not figure it out. The model burned through tokens staring at walls of tool definitions, and still managed to call the wrong ones half the time.
+
+So I got clever. Before each request, I'd predict which tools the user probably needed, pull just those few schemas, and inject them dynamically. Fewer tokens, better signal. Seemed like a solid optimization.
+
+Then I looked at how inference engines actually work under the hood. And quietly deleted all of it.
+
+---
+
+Here's the background. Modern LLM inference engines use something called a KV cache. As the model processes your prompt, it computes intermediate representations for each token — and those get stored in GPU memory. On the next request, if the beginning of your prompt is identical to the previous one, the engine skips recomputing those tokens entirely and picks up from where the cache left off.
+
+The catch: "identical" means byte-for-byte, from token zero. Insert a single comma anywhere in the middle, and every token after that point shifts position. The position encodings no longer match. Cache invalidated. The engine starts over.
+
+Now look at what my "smart tool filtering" was actually doing:
+
+- Round 1: `[system prompt] + [tool A] + [chat history]` — cache warmed up.
+- Round 2: User asks something math-related, so I inject a calculator tool. Now it's `[system prompt] + [tool A, tool B] + [chat history]`.
+
+One tool added near the top. Thousands of tokens of chat history shifted down. Cache completely gone. Full recompute.
+
+I thought I was saving money. I was making a regular donation to my cloud provider.
+
+---
+
+What I found interesting after deleting that code: Claude Code and the latest ChatGPT both support dynamic tool retrieval natively — and they clearly don't have this problem. So how do they pull it off?
+
+The answer is one rule: **only ever append to the end, never insert earlier.**
+
+The system prompt stays dead simple — something like "you have access to many tools; search for them when you need them." That line never changes. It's permanently cached.
+
+When the user asks something, the model figures out what tools it needs. The system retrieves those tool definitions — but instead of injecting them into the system prompt, it appends them as a new message at the very end of the conversation.
+
+Everything before that point is untouched. The cache hits. The model only runs incremental computation on the few hundred tokens you just added.
+
+There's a subtle prerequisite here worth calling out: this only works if the model can read tool definitions at the tail end of a long conversation and still remember what it was supposed to be doing. That's not guaranteed — it's actually something newer models were specifically fine-tuned for, to resist over-indexing on recency. Without that, you'd have a model that reads its tool manual and immediately forgets its own job description.
+
+---
+
+Two related traps while we're here.
+
+**Sliding window context truncation.** A common pattern for managing context length is to keep only the last N turns and drop the oldest ones. But the moment you remove the first message, every subsequent message shifts up by one position. Cache invalidated, same as before. You think you're trimming costs; you're actually blowing up your cache on every request.
+
+The better pattern: let the conversation grow. When you're approaching the context limit, have the model write a summary, inject that into the system prompt as the new baseline, and clear the history. You pay for one full recompute. Then you're back to clean caching with room to grow.
+
+**Which tools to cache vs. retrieve dynamically.** Core tools — the ones your agent uses constantly — should live in the system prompt and stay cached permanently. Dynamic retrieval makes sense for long-tail tool libraries where you might have hundreds of APIs and only a few are relevant per request.
+
+---
+
+The irony is that the "dumb" approach — static tools, append-only context — is actually the one that performs well. The clever dynamic filtering was the thing costing me money.
+
+At least now I can have the AI write this stuff for me.
