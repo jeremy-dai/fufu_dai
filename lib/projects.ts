@@ -127,8 +127,8 @@ export const projects: Project[] = [
       "hi-time：个人时间管理工具。起初是为了满足自己的需求，后来成为 AI 功能实验的游乐场。hi-money：个人财务追踪工具。在学习全栈开发的过程中搭建，同时探索 Text-to-SQL。",
     stack: "Next.js · React · Vercel · Google Calendar API · Express",
     links: [
-      { label: "hi-time", url: "#" },
-      { label: "hi-money", url: "#" },
+      { label: "hi-time", url: "https://time.daifufu.com" },
+      { label: "hi-money", url: "https://money.daifufu.com" },
     ],
   },
 ];

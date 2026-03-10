@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
-import type { PostMeta } from "@/lib/posts";
+import type { PostMeta, BlogTag } from "@/lib/posts";
 import { useLang } from "@/lib/language-context";
 
 const POSTS_PER_PAGE = 10;
@@ -17,7 +17,7 @@ export function BlogFilter({
   showPageTitle?: boolean;
 }) {
   const { lang } = useLang();
-  const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [activeTag, setActiveTag] = useState<BlogTag | null>(null);
   const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
   const loaderRef = useRef<HTMLDivElement>(null);
 
