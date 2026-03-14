@@ -81,18 +81,18 @@ export function AboutContent() {
 
   return (
     <>
-      <h1 className="font-mono text-3xl font-bold text-zinc-100">
+      <h1 className="text-3xl font-semibold tracking-tight text-zinc-100">
         {zh ? "关于" : "About"}
       </h1>
 
       {/* Opening */}
-      <blockquote className="mt-8 border-l-3 border-accent pl-4 text-lg italic text-muted">
+      <blockquote className="mt-8 border-l-2 border-zinc-700 pl-4 text-base italic text-zinc-400">
         {zh
           ? "脑子里总有个声音说我该干点别的。那个声音，一般是我老板。"
           : "There's always been a voice in my mind saying I should do something else. Well, normally that voice was my boss."}
       </blockquote>
 
-      <div className="mt-6 space-y-4 leading-relaxed text-muted">
+      <div className="mt-6 space-y-4 leading-relaxed text-zinc-400">
         {zh ? (
           <>
             <p>
@@ -137,20 +137,20 @@ export function AboutContent() {
         )}
       </div>
 
-      <p className="mt-6 text-muted">
+      <p className="mt-6 text-zinc-400">
         {zh
           ? "Anyways，我爸妈到现在还跟人说我是搞土木的。"
           : "Anyways, my parents still tell people I'm a civil engineer."}
       </p>
 
       {/* Tech Stack */}
-      <h2 className="mt-16 font-mono text-xl font-semibold text-zinc-100">
+      <h2 className="mt-16 text-xs font-medium uppercase tracking-[0.2em] text-zinc-500">
         {zh ? "技术栈" : "Tech Stack"}
       </h2>
-      <div className="mt-4">
+      <div className="mt-6">
         <InfiniteMovingCards items={techItems} speed="slow" />
       </div>
-      <div className="mt-6 space-y-2 text-sm text-muted">
+      <div className="mt-6 space-y-2 text-sm text-zinc-400">
         <p>
           <span className="font-semibold text-zinc-300">{zh ? "AI/LLM：" : "AI/LLM:"}</span>{" "}
           Agent · Context Engineering · RAG · Prompt Engineering · MCP
@@ -166,23 +166,22 @@ export function AboutContent() {
       </div>
 
       {/* Timeline */}
-      <h2 className="mt-16 font-mono text-xl font-semibold text-zinc-100">
+      <h2 className="mt-16 text-xs font-medium uppercase tracking-[0.2em] text-zinc-500">
         {zh ? "职业经历" : "Career Timeline"}
       </h2>
-      <div className="mt-6 space-y-0">
+      <div className="mt-6 grid gap-0">
         {timeline.map((item) => (
           <div
             key={item.year}
-            className="group relative flex gap-6 border-l border-border py-4 pl-6"
+            className="grid grid-cols-[7rem_1fr] gap-4 py-3 border-b border-zinc-800/40 last:border-0"
           >
-            <div className="absolute -left-1.5 top-5 h-3 w-3 rounded-full border-2 border-accent bg-background" />
-            <span className="shrink-0 font-mono text-sm text-muted w-24">
+            <span className="font-mono text-xs text-zinc-600 pt-0.5">
               {item.year}
             </span>
             <div>
-              <p className="text-zinc-200">{zh ? item.role_zh : item.role}</p>
+              <p className="text-sm text-zinc-200">{zh ? item.role_zh : item.role}</p>
               {(zh ? item.detail_zh : item.detail) && (
-                <p className="text-sm text-muted">
+                <p className="text-xs text-zinc-500 mt-0.5">
                   {zh ? item.detail_zh : item.detail}
                 </p>
               )}
@@ -192,10 +191,10 @@ export function AboutContent() {
       </div>
 
       {/* Patents */}
-      <h2 className="mt-16 font-mono text-xl font-semibold text-zinc-100">
+      <h2 className="mt-16 text-xs font-medium uppercase tracking-[0.2em] text-zinc-500">
         {zh ? "专利申请" : "Patent Applications"}
       </h2>
-      <p className="mt-4 text-muted">
+      <p className="mt-4 text-zinc-400">
         {zh
           ? "两项 NLP 专利申请，来自埃森哲/阿罗尔森档案馆项目，做的是历史档案的文件分类和结构化数据提取。"
           : "Two NLP patent applications from the Accenture/Arolsen Archives project, covering document classification and structured data extraction from historical records."}

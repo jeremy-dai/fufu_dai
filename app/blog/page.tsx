@@ -12,7 +12,7 @@ export default function BlogPage() {
   const allTags = Array.from(new Set(posts.flatMap((p) => p.tags)));
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-24">
+    <div className="mx-auto max-w-6xl px-6 sm:px-8 pt-20 sm:pt-24 pb-16">
       <BlogFilter posts={posts} allTags={allTags} showPageTitle />
     </div>
   );

@@ -43,7 +43,7 @@ export default async function BlogPostPage({
   const post = getPost(slug);
   if (!post) notFound();
 
-  const code = await compileMDX(post.content);
+  const MDXComponent = await compileMDX(post.content);
 
   const jsonLd = articleJsonLd({
     title: post.meta.title,
@@ -61,7 +61,7 @@ export default async function BlogPostPage({
       />
       <Link
         href="/"
-        className="inline-flex items-center gap-1 text-sm text-muted hover:text-accent transition-colors"
+        className="inline-flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
       >
         <ArrowLeft size={14} />
         Back
@@ -69,31 +69,24 @@ export default async function BlogPostPage({
 
       <article className="mt-8">
         <header>
-          <h1 className="font-mono text-3xl font-bold text-zinc-100">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-zinc-100">
             {post.meta.title}
           </h1>
-          <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-muted">
+          <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-zinc-500 font-mono">
             <time>{post.meta.date}</time>
             <span>·</span>
             <span>{post.meta.readingTime}</span>
             <span>·</span>
             <span className="uppercase text-xs">{post.meta.lang}</span>
           </div>
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {post.meta.tags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded bg-zinc-800 px-2 py-0.5 text-xs text-zinc-400"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
+          <p className="mt-2 text-xs text-zinc-600">
+            {post.meta.tags.join(" · ")}
+          </p>
         </header>
 
         <div className="mt-10 flex gap-12">
           <div className="min-w-0 flex-1">
-            <MDXContent code={code} />
+            <MDXContent Component={MDXComponent} />
           </div>
           <aside className="hidden w-56 shrink-0 xl:block">
             <TableOfContents />

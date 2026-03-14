@@ -33,7 +33,7 @@ export function FloatingDock({
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(
-        "fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-end gap-2 rounded-2xl border border-zinc-800 bg-zinc-900/80 px-3 py-2 backdrop-blur-md",
+        "fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-end gap-2 rounded-2xl border border-zinc-700 bg-zinc-800/90 px-3 py-2 backdrop-blur-md",
         className
       )}
     >

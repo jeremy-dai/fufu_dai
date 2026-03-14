@@ -1,40 +1,64 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { Github, Linkedin, Mail, Twitter } from "lucide-react";
 import { SiZhihu, SiXiaohongshu } from "react-icons/si";
 import { useLang } from "@/lib/language-context";
+import { Card3D } from "@/components/ui/card-3d";
+import { FlipWords } from "@/components/ui/flip-words";
 
 export function HomeHeader() {
-  const { lang, setLang } = useLang();
+  const { lang } = useLang();
   const zh = lang === "zh";
 
   return (
-    <header className="flex gap-5">
-      <Image
-        src="/profile.jpg"
-        alt="Jeremy Dai"
-        width={80}
-        height={80}
-        className="rounded-full object-cover h-20 w-20 flex-shrink-0"
-      />
-      <div>
-        <h1 className="font-mono text-2xl font-bold text-zinc-100">
-          {zh ? "戴fufu" : "Jeremy Dai"}{" "}
-          <span className="text-lg font-normal text-muted">(@daifufu)</span>
+    <header className="flex flex-col items-start gap-6">
+      <Card3D className="cursor-pointer shrink-0">
+        <Image
+          src="/profile.jpg"
+          alt="Jeremy Dai"
+          width={96}
+          height={96}
+          className="rounded-2xl object-cover h-24 w-24 border border-zinc-800"
+        />
+      </Card3D>
+
+      <div className="w-full">
+        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-zinc-100">
+          {zh ? "戴fufu" : "Jeremy Dai"}
         </h1>
-        <p className="mt-2 leading-relaxed text-muted">
-          {zh
-            ? "KAWO AI 工程师，做 Agent 系统落地，顺便排查各种玄学 bug。"
-            : "AI Engineer at KAWO. I build Agent systems in production, then figure out why they don't work as expected."}
+        <p className="mt-1 text-sm text-zinc-500">@daifufu</p>
+
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-zinc-400">
+          {zh ? (
+            <>
+              KAWO AI 工程师，做
+              <FlipWords
+                key={lang}
+                words={["Agent 系统落地", "RAG 管线优化", "AI 产品交付"]}
+                className="text-zinc-100 font-medium"
+              />
+              ，顺便排查各种玄学 bug。
+            </>
+          ) : (
+            <>
+              AI Engineer at KAWO. I
+              <FlipWords
+                key={lang}
+                words={["build Agent systems", "ship RAG pipelines", "debug AI in prod"]}
+                className="text-zinc-100 font-medium"
+              />
+              and write about what breaks.
+            </>
+          )}
         </p>
-        <div className="mt-3 flex items-center gap-4">
+
+        <div className="mt-5 flex items-center gap-4">
           <a
             href="https://github.com/jeremy-dai"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-zinc-500 transition-colors hover:text-accent"
+            className="text-zinc-600 transition-colors hover:text-zinc-300"
           >
             <Github size={18} />
           </a>
@@ -42,7 +66,7 @@ export function HomeHeader() {
             href="https://www.zhihu.com/people/jieruimi"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-zinc-500 transition-colors hover:text-accent"
+            className="text-zinc-600 transition-colors hover:text-zinc-300"
           >
             <SiZhihu size={18} />
           </a>
@@ -50,7 +74,7 @@ export function HomeHeader() {
             href="https://www.xiaohongshu.com/user/profile/6399c49b0000000026007957"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-zinc-500 transition-colors hover:text-accent"
+            className="text-zinc-600 transition-colors hover:text-zinc-300"
           >
             <SiXiaohongshu size={18} />
           </a>
@@ -58,7 +82,7 @@ export function HomeHeader() {
             href="https://x.com/jeremy_dai_"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-zinc-500 transition-colors hover:text-accent"
+            className="text-zinc-600 transition-colors hover:text-zinc-300"
           >
             <Twitter size={18} />
           </a>
@@ -66,36 +90,16 @@ export function HomeHeader() {
             href="https://www.linkedin.com/in/jeremydai/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-zinc-500 transition-colors hover:text-accent"
+            className="text-zinc-600 transition-colors hover:text-zinc-300"
           >
             <Linkedin size={18} />
           </a>
           <a
             href="mailto:jeremyydai@gmail.com"
-            className="text-zinc-500 transition-colors hover:text-accent"
+            className="text-zinc-600 transition-colors hover:text-zinc-300"
           >
             <Mail size={18} />
           </a>
-          <span className="text-zinc-700">·</span>
-          <Link
-            href="/about"
-            className="text-sm text-zinc-500 transition-colors hover:text-accent"
-          >
-            {zh ? "关于" : "About"}
-          </Link>
-          <Link
-            href="/projects"
-            className="text-sm text-zinc-500 transition-colors hover:text-accent"
-          >
-            {zh ? "项目" : "Projects"}
-          </Link>
-          <span className="text-zinc-700">·</span>
-          <button
-            onClick={() => setLang(zh ? "en" : "zh")}
-            className="text-sm text-zinc-500 transition-colors hover:text-accent font-mono"
-          >
-            {zh ? "EN" : "中"}
-          </button>
         </div>
       </div>
     </header>
