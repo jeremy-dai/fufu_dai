@@ -1,0 +1,40 @@
+---
+title: "Most of Agent Engineering Has Nothing to Do with AI"
+description: "The hardest part of building agents isn't prompt engineering — it's context management. When dynamic tool loading and skills both hit dead ends, sometimes you just build the ugly thing that works."
+date: "2026-03-26"
+tags: ["Agent", "AI", "Engineering"]
+lang: "en"
+published: true
+---
+
+I've been improving an AI agent recently. The logic isn't complicated, but it connects to a lot of APIs with complex tool parameters. Stuff everything into the context and the agent gets both dumb and expensive. Dozens of JSON Schema tool definitions sitting in the context window means the model burns attention and tokens just figuring out what it can do — before it even starts thinking about what it should do.
+
+There are two well-known approaches to this problem.
+
+## Option 1: Dynamic Tool Loading
+
+Some models now support placing tool definitions outside the system prompt prefix, which preserves the KV cache across turns. That's a direct win for latency and cost — the prefix stays stable, cached computations get reused, and you only pay for the new tokens.
+
+But not every model supports this. If yours doesn't, this road is closed.
+
+## Option 2: Skills
+
+Extract business logic from tool definitions into Markdown documents. Load them on demand. The agent doesn't need to see every capability at once — when it hits a specific scenario, it reads the relevant playbook.
+
+This solves the "how to think" problem but introduces a new one: what if a skill isn't just instructions but involves executable code? Then you need a sandbox. Without one, skills stay as documentation the AI reads — they can't actually run anything.
+
+So if you happen to be working with a model that doesn't support dynamic tool loading and you don't have a sandbox available, both roads are blocked.
+
+That's exactly the situation I was in.
+
+## The Poor Man's Dynamic Loader
+
+The solution I landed on is unglamorous: a hand-rolled skill registry. From the AI's perspective, it sees a single tool called `run_skill`. Behind that, a dispatcher routes to the right function based on the skill name. It's basically dynamic tool loading implemented at the application layer — a poor man's version of what the infrastructure should be doing.
+
+Not elegant. But it ships.
+
+## Context Management Is the Real Job
+
+After spending this much time building agents, one conviction keeps getting stronger: the bulk of the work isn't prompt engineering. It's context management. What information appears when, where it sits in the context window, how long it stays — these decisions are what make an agent smart or stupid.
+
+There's no optimal solution here. Just scaffolding that gets the job done. Ship it and iterate.
