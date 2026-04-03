@@ -29,7 +29,7 @@ export function HomeHeader() {
         </h1>
         <p className="mt-1 text-sm text-zinc-500">@daifufu</p>
 
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-zinc-400">
+        <div className="mt-4 max-w-2xl text-base leading-relaxed text-zinc-400">
           {zh ? (
             <>
               KAWO AI 工程师，做
@@ -51,7 +51,7 @@ export function HomeHeader() {
               and write about what breaks.
             </>
           )}
-        </p>
+        </div>
 
         <div className="mt-5 flex items-center gap-4">
           <a
