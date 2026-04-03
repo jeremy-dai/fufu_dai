@@ -26,6 +26,7 @@ export interface Project {
   links?: { label: string; url: string }[];
   stack?: string;
   order?: number;
+  video?: string;
 }
 
 export function getAllProjects(): Project[] {

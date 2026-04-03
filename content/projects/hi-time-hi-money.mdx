@@ -2,22 +2,37 @@
 title: "hi-time & hi-money"
 subtitle: Personal Productivity Tools
 subtitle_zh: 个人效率工具
-description: "Tools I built to organize my own life — turning the messy parts into structured text that AI can work with."
-description_zh: "为整理自己生活而做的工具——把混乱的部分变成结构化文本，让 AI 能够处理。"
-tags: [Next.js, React, AI]
+description: "Seven years of logging every hour — built into tools that feed AI full context about my life."
+description_zh: "七年的时间与财务记录——构建成能为 AI 提供完整生活上下文的工具。"
+tags: [Next.js, React, AI, Productivity]
 status: "Live · Side Projects"
 status_zh: "上线中 · 个人项目"
 stack: "Next.js · React · Vercel · Google Calendar API · Express"
 order: 3
-problem: "Time, money, decisions. If it can be written down, it can be processed."
-problem_zh: "时间、金钱、决策。能写下来的，都能被处理。"
+video: "https://www.youtube.com/embed/x89QSXtRcWU"
+problem: >-
+  Seven years ago I started logging every hour of my day, just to gamify life. When AI arrived, I realized all that structured data could mean something — if I could get it in front of AI without needing a database or API integration.
+problem_zh: >-
+  七年前开始记录每天每小时在干什么，起初只是为了把生活游戏化。AI 出现后，我意识到这些结构化数据可以有更大的价值——如果能在不需要数据库或 API 对接的情况下把数据喂给 AI。
 solution: >-
-  hi-time: A personal time management tool. Started as something I needed, became a playground for AI feature experiments. hi-money: A personal finance tracker. Built to learn full-stack development and explore Text-to-SQL.
+  Built hi-time and hi-money as frontends that automatically sync to a markdown vault. Markdown is an LLM's native language — one line like `09:00-11:30 | W` and the AI knows exactly what you did that morning. The vault becomes a personal data center; every AI conversation starts from there.
 solution_zh: >-
-  hi-time：个人时间管理工具。起初是为了满足自己的需求，后来成为 AI 功能实验的游乐场。hi-money：个人财务追踪工具。在学习全栈开发的过程中搭建，同时探索 Text-to-SQL。
+  将 hi-time 和 hi-money 作为前端，自动将数据同步到 Markdown 笔记库。Markdown 对大模型来说就是母语——一行 `09:00-11:30 | W`，AI 就能读懂你的上午。笔记库成为个人数据中心，所有与 AI 的对话都从这里开始。
+impact:
+  - "AI can now plan my week with full context — it noticed I'd worked 45 hours, my rest ratio was dropping, and I had a Korea trip coming. Zero extra prompting needed."
+  - "The system learned my patterns: it caught that I'm interest-driven and spend evenings on unplanned things, then told me to design around it."
+  - "Seven years of data. One markdown vault. Any AI can read it."
+impact_zh:
+  - "AI 现在能够掌握完整上下文为我规划一周——它发现我工作了 45 小时，休息比例在降，还有一趟韩国行在即。无需任何额外提示词。"
+  - "系统比我更了解我的模式：它发现我是兴趣驱动型的人，晚上经常在做计划外的事，并直接建议我顺势利用这一点。"
+  - "七年的数据。一个 Markdown 笔记库。任何 AI 都能读懂。"
 links:
   - label: hi-time
     url: https://time.daifufu.com
   - label: hi-money
     url: https://money.daifufu.com
+  - label: "Blog: What It's Like to Feed Yourself to an AI"
+    url: https://fufu.dev/blog/feed-yourself-to-ai-en
+  - label: 博客：把自己喂给 AI 是什么体验
+    url: https://fufu.dev/blog/feed-yourself-to-ai
 ---

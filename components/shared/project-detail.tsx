@@ -50,6 +50,19 @@ export function ProjectDetail({ project }: { project: Project }) {
         ))}
       </div>
 
+      {project.video && (
+        <div className="mt-10 overflow-hidden rounded-lg" style={{ aspectRatio: "16/9" }}>
+          <iframe
+            width="100%"
+            height="100%"
+            src={project.video}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      )}
+
       {project.problem && (
         <section className="mt-10">
           <h2 className="font-mono text-lg font-semibold text-zinc-100">
