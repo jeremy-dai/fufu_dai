@@ -6,11 +6,13 @@ Personal portfolio website built with Next.js. Includes blog, projects, and inte
 
 ## Blog Posts
 
+> When asked to write or create a blog post, follow all rules in this section exactly before generating any content.
+
 - **Location:** `content/blog/` as `.mdx` files
 - **Frontmatter fields:**
   - `title` (string, required)
   - `description` (string, required) — used for SEO/excerpt
-  - `date` (string, required) — format `YYYY-MM-DD`
+  - `date` (string, required) — format `YYYY-MM-DD`, **must be quoted** (e.g. `date: "2026-03-31"`). Unquoted ISO dates are parsed by YAML as Date objects, which breaks sort order on the blog listing page.
   - `tags` (string array, required) — valid values: `AI`, `LLM`, `Agent`, `RAG`, `Engineering`, `Career`, `Productivity`, `Marketing`
   - `lang` (string, required) — `"en"` or `"zh"`
   - `published` (boolean) — defaults to `true`
