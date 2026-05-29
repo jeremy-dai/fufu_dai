@@ -1,0 +1,40 @@
+---
+title: "Just Edit the Paragraph"
+description: "I figured adding an edit feature to my agent would be trivial. Instead I fell into three rabbit holes — str_replace, fuzzy patch, and Fast Apply. No best practice, just A/B tests."
+date: "2026-05-22"
+tags: ["Agent", "LLM", "Engineering"]
+lang: "en"
+published: true
+---
+
+I wanted to add a feature to my agent: let it edit a piece of existing code (or text). Sounds insultingly simple — if you can get a model to write a whole article from scratch, tweaking one paragraph should be a freebie.
+
+Then I went down the rabbit hole and realized things are much messier. There is no one-size-fits-all "best practice." The community is currently split into three main schools of thought.
+
+## School One: str_replace — Trade Tokens for Stability
+
+Let's start with the most intuitive approach, officially recommended by Anthropic and used by Claude Code: **`str_replace` (String Replace)**. Have the model echo the "old code" verbatim as an anchor, then spit out the "new code," and run a script locally to do an exact match find-and-replace. It's clean, runs purely on APIs, and requires no low-level plumbing.
+
+But the catch is it burns through tokens like crazy. To guarantee a unique match, you often have to make the model copy an entire paragraph or even a whole function body as the `old_str`. Claude pulls this off because 3.5 Sonnet is smart, has a massive context window, and is relatively cheap. Their underlying logic is clear: since auto-regressive LLMs are inherently terrible at counting absolute line numbers, just trade token consumption for 100% stable context positioning.
+
+## School Two: Fuzzy Patch — Let Local Algorithms Cover the Mess
+
+So what if you don't want to burn that many tokens? That brings us to the second camp, the path taken by early OpenAI and the currently popular open-source darling, Aider: **Fuzzy Patch**. A lot of people mistakenly assume that outputting a Diff just means silently calling the system's `patch` command in the background. Anyone who's tried it knows that standard GNU patch is extremely fragile — if the model spits out one extra space or gets the indentation slightly wrong, the system command just crashes and burns.
+
+So Aider built a "mutant" version: they use custom `SEARCH/REPLACE` blocks to describe changes, **deliberately avoiding exact line numbers**. The model just outputs local changes, and once it hits your machine, a Python script performs a "fuzzy match" with some tolerance. Even if the model bungles the anchor context a bit, the script forces it in. This camp is all about using local engineering algorithms to catch the model's sloppy mistakes.
+
+## School Three: Fast Apply — Throw Money at the Infrastructure
+
+Both of the above are playable if you're purely relying on APIs. But if you look at a heavy hitter like Cursor, they take a third, vastly superior route: **Fast Apply (Speculative Decoding)**. Cursor can rewrite thousands of lines in seconds. People online often guess it's running some insane local AST (Abstract Syntax Tree) alignment algorithm. Nope. The real killer weapon is in the cloud. They took Speculative Decoding to the next level: normally, this technique uses a small model to guess tokens and a large model to verify them. Cursor doesn't let a small model guess at all; it feeds the "original file" straight off the user's hard drive to a fine-tuned large model in the cloud as the "draft."
+
+So the process becomes: the engine shovels the original text into the model chunk by chunk, the model goes, "Yep, yep, that's exactly what I'd write," and whoosh — dozens or hundreds of tokens fly past. Until it hits the part you want changed, where the model goes, "Nope, I want something else here," stops, and dutifully generates the new content one token at a time. Once it's done, it finds where it lines back up with the original and resumes the sprint.
+
+Sounds perfect. But this road is closed to mere mortals — you need to be able to modify the inference engine and touch the low-level KV cache. If all you've got is an API, you can't even find the door.
+
+## The Retired "Blind Sniper" Approach
+
+As for the older "blind sniper" approach — abstracting the document into coordinates and telling the model "edit line three" — it's highly situational and has a terrible margin of error in practice, making it rare among mainstream production solutions.
+
+## Three Moves, and API Players Only Get the First Two
+
+So, boiling it down, there are really only three moves: trade tokens for absolute stability like Claude, use fuzzy search to clean up the model's mess like Aider, or throw money at low-level infrastructure like Cursor. Pure API players can only choose between the first two. Proof's in the pudding, I guess. Time to run the A/B test.
