@@ -1,0 +1,52 @@
+---
+title: The 128GB AI Beast Has Arrived — and Local AI Is Finally Moving In
+description: The truly interesting part of NVIDIA and Microsoft's AI PC isn't that local models got smarter — it's that the agent is finally being managed as a process with permissions.
+date: "2026-06-01"
+tags: [AI, Agent]
+lang: "en"
+published: true
+---
+
+Jensen just unveiled something new, and NVIDIA and Microsoft are getting serious about the AI PC.
+
+The launch pitch had that familiar ring to it. Your computer becomes a teammate, Windows enters the agent era, agents do the work for you, and you get to decide when they act and what they're allowed to touch.
+
+Two things caught my eye: the RTX Spark with up to 128GB of unified memory, and OpenShell.
+
+## 128GB Unified Memory: Local Models Finally Have Somewhere to Live
+
+The first one solves a very practical problem — local models finally have somewhere to live. Until now, running Ollama on your machine meant any halfway-large model would eat up all your RAM and fight your other apps for resources. You could make it work, but it was always a compromise. 128GB of unified memory isn't a silver bullet, of course, but it's a sign that personal computers are starting to take local models seriously and actually leave room for them.
+
+The official line is that this chip can run 120B-parameter models with context windows in the millions of tokens locally. Squeeze the marketing fluff out and it roughly means this: models in the GPT-OSS 120B or Qwen3.5-122B class, quantized to 4-bit, will fit (and don't expect to load the full model *and* max out a million-token context at the same time — pick one). Day-to-day inference runs fine, and the experience is broadly okay. Capability-wise it's roughly in the GPT-5-mini tier — it never reaches the genuine open-source flagships (the hundreds-of-billions, trillion-parameter models you can't fit on a single box) or the frontier of closed cloud models.
+
+Which is the point: local models were never meant to replace the cloud flagships. Their place is "good enough, close at hand, private" — and that means intelligence isn't the only thing that matters.
+
+## OpenShell: Acknowledging That an Agent Is a Process With Permissions
+
+The second one is more interesting. OpenShell isn't about "making the agent smarter." It's an acknowledgment of a different problem: once local AI can actually *do* things, you can no longer treat it like a chat box.
+
+Its job is mundane: you can run agents like Claude Code, Codex, or OpenCode, but they have to live in a sandbox. Whether they can read a file, reach the network, how credentials get injected, whether a request gets routed to the local model — all of it runs through a single YAML policy. Nothing is granted by default; you request access when you need it. And this policy layer runs *outside* the agent process, so the agent can't rewrite it.
+
+Put plainly, it admits something: an agent isn't a chat box — it's a process holding all your permissions and free to wander around.
+
+## Intelligence Isn't the Only Question
+
+That's the part I find genuinely interesting.
+
+We used to discuss local LLMs by fixating on "can it run 70B," "how many tokens per second," "how far is it from GPT-4." That matters, sure. But for a personal agent you can actually use, intelligence turns out not to be the only question.
+
+The question is whether it has a body — and whether that body keeps its hands to itself.
+
+When I was building hi-time and hi-money, this tension was obvious. Time blocks, tasks, spending, assets, weekly reviews — all of it is exactly the kind of data you'd want to feed an AI. Feed it in, and it'll tell you things you'd rather not admit. You say you spent the week pushing an important project forward; the calendar says you just sliced your anxiety into a lot of tidy little blocks.
+
+But that data is also awkward. You *can* send it to a cloud API for analysis, but it feels a bit like handing your diary to an outsourcing firm to run BI on. Doable, but not graceful.
+
+## Adding a Layer of Social Order for the Personal Agent
+
+So I'd rather read this move by NVIDIA and Microsoft not as reinventing the PC, but as adding a layer of social order for the personal agent. The local model handles the context that's intimate, mundane, private, and needs to be present long-term; the cloud model handles the genuinely hard reasoning; and in between sits a policy layer that decides who can see what, who gets to go outside, who gets to hold the keys.
+
+That doesn't sound as sexy as "AI redefines productivity." But when agents finally land in the real world, what usually decides things isn't whether the model can write one beautiful answer — it's whether it can sit on your computer all day without tearing the house apart.
+
+We used to count the cents per API call.
+
+What we may end up counting instead: how much extra I'm willing to pay on my power bill each month to keep this local AI living in my computer for the long haul.
