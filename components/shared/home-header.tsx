@@ -32,7 +32,7 @@ export function HomeHeader() {
         <div className="mt-4 max-w-2xl text-base leading-relaxed text-zinc-400">
           {zh ? (
             <>
-              KAWO AI 工程师，做
+              Google GenAI FDE，做
               <FlipWords
                 key={lang}
                 words={["Agent 系统落地", "RAG 管线优化", "AI 产品交付"]}
@@ -42,7 +42,7 @@ export function HomeHeader() {
             </>
           ) : (
             <>
-              AI Engineer at KAWO. I
+              GenAI FDE at Google. I
               <FlipWords
                 key={lang}
                 words={["build Agent systems", "ship RAG pipelines", "debug AI in prod"]}
