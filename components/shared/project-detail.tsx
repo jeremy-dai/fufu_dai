@@ -20,7 +20,7 @@ export function ProjectDetail({ project }: { project: Project }) {
   const t = (key: keyof typeof labels) => labels[key][lang];
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-24">
+    <div className="mx-auto max-w-3xl px-6 pt-12 pb-24">
       <Link
         href="/projects"
         className="inline-flex items-center gap-1 text-sm text-muted hover:text-accent transition-colors"

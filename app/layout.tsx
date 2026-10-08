@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Inter, Noto_Sans_SC } from "next/font/google";
-import dynamic from "next/dynamic";
 import { personJsonLd } from "@/lib/jsonld";
 import { LanguageProvider } from "@/lib/language-context";
+import { SiteNav } from "@/components/shared/site-nav";
+import { SiteFooter } from "@/components/shared/site-footer";
+import { MotionProvider } from "@/components/shared/motion-provider";
+import { AuroraBackground } from "@/components/ui/aurora-background";
 import "./globals.css";
-
-const DockWrapper = dynamic(() =>
-  import("@/components/shared/dock-wrapper").then((m) => m.DockWrapper),
-);
 
 const inter = Inter({
   variable: "--font-sans-main",
@@ -31,7 +30,7 @@ export const metadata: Metadata = {
     template: "%s | Jeremy Dai",
   },
   description:
-    "AI Engineer building RAG & Agent systems in production. 2 NLP Patents. Based in Shanghai.",
+    "GenAI Forward Deployed Engineer at Google. Building Agent & RAG systems in production, and writing about what breaks.",
   metadataBase: new URL("https://fufu.dev"),
   alternates: {
     canonical: "https://fufu.dev",
@@ -66,8 +65,12 @@ export default function RootLayout({
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd()) }}
           />
-          <main className="min-h-screen pb-20">{children}</main>
-          <DockWrapper />
+          <MotionProvider>
+            <AuroraBackground />
+            <SiteNav />
+            <main className="min-h-screen">{children}</main>
+            <SiteFooter />
+          </MotionProvider>
         </LanguageProvider>
       </body>
     </html>

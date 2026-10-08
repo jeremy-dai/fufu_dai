@@ -9,11 +9,10 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
   const posts = getAllPosts();
-  const allTags = Array.from(new Set(posts.flatMap((p) => p.tags)));
 
   return (
-    <div className="mx-auto max-w-6xl px-6 sm:px-8 pt-20 sm:pt-24 pb-16">
-      <BlogFilter posts={posts} allTags={allTags} showPageTitle />
+    <div className="mx-auto max-w-4xl px-6 sm:px-8 pt-12 sm:pt-16 pb-16">
+      <BlogFilter posts={posts} />
     </div>
   );
 }

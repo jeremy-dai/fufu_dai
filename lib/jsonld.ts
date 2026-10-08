@@ -6,8 +6,8 @@ export function personJsonLd() {
     "@type": "Person",
     name: "Jeremy Dai",
     url: BASE_URL,
-    jobTitle: "AI Engineer",
-    worksFor: { "@type": "Organization", name: "KAWO" },
+    jobTitle: "GenAI Forward Deployed Engineer",
+    worksFor: { "@type": "Organization", name: "Google" },
     sameAs: [
       "https://github.com/jeremy-dai",
       "https://www.linkedin.com/in/jeremydai/",

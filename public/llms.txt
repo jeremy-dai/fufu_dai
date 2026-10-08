@@ -1,9 +1,9 @@
 # Jeremy Dai
 
-> AI Engineer based in Shanghai. Building RAG & Agent systems in production.
+> GenAI Forward Deployed Engineer at Google, based in Shanghai. Building RAG & Agent systems in production.
 
 ## About
-Jeremy Dai is an AI Engineer at KAWO, building Kevin — an AI marketing agent serving 500+ global enterprise brands. Previously at txyz.ai (AI research startup, 500K+ users) and Accenture Netherlands where he led a team of 8 on AI digitization of 30 million Holocaust documents from the Arolsen Archives (UNESCO Memory of the World). That project won the V360 Global Innovation Award and produced 2 NLP patents.
+Jeremy Dai is a GenAI Forward Deployed Engineer at Google (since August 2026). Previously at KAWO, where he built Kevin — an AI marketing agent serving 500+ global enterprise brands — and at txyz.ai (AI research startup, 500K+ users) and Accenture Netherlands where he led a team of 8 on AI digitization of 30 million Holocaust documents from the Arolsen Archives (UNESCO Memory of the World). That project won the V360 Global Innovation Award and produced 2 NLP patents.
 
 Background spans traffic engineering (US/Canada), MSc Statistics (Leiden University, graduated ahead of schedule), and MSc Civil Engineering (Texas A&M). Lived in 4 countries.
 

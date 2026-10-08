@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import readingTime from "reading-time";
+import GithubSlugger from "github-slugger";
 
 const contentDir = path.join(process.cwd(), "content/blog");
 
@@ -96,5 +97,56 @@ export function getPost(slug: string) {
       readingTime: rt.text,
     } as PostMeta,
     content,
+  };
+}
+
+export interface Heading {
+  id: string;
+  text: string;
+  level: 2 | 3;
+}
+
+/**
+ * Extract H2/H3 headings from raw MDX for the table of contents.
+ * Uses github-slugger — the same slugger rehype-slug uses — so ids match.
+ */
+export function extractHeadings(content: string): Heading[] {
+  const slugger = new GithubSlugger();
+  const headings: Heading[] = [];
+  let inFence = false;
+
+  for (const line of content.split("\n")) {
+    if (/^\s*(```|~~~)/.test(line)) inFence = !inFence;
+    if (inFence) continue;
+    const m = /^(#{1,6})\s+(.+?)\s*#*\s*$/.exec(line);
+    if (!m) continue;
+    const text = m[2]
+      .replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1") // links / images
+      .replace(/[`*_~]/g, "") // inline formatting
+      .replace(/<[^>]+>/g, "") // inline html
+      .trim();
+    // Slug every heading level so duplicate counters stay in sync.
+    const id = slugger.slug(text);
+    const level = m[1].length;
+    if (level === 2 || level === 3) headings.push({ id, text, level });
+  }
+  return headings;
+}
+
+/** Slug of the other-language version (`foo` ⇄ `foo-en`), if it exists. */
+export function getTranslationSlug(slug: string, posts = getAllPosts()): string | null {
+  const other = slug.endsWith("-en") ? slug.slice(0, -3) : `${slug}-en`;
+  return posts.some((p) => p.slug === other) ? other : null;
+}
+
+/** Newer / older posts in the same language. */
+export function getAdjacentPosts(slug: string, posts = getAllPosts()) {
+  const current = posts.find((p) => p.slug === slug);
+  if (!current) return { newer: null, older: null };
+  const same = posts.filter((p) => p.lang === current.lang);
+  const i = same.findIndex((p) => p.slug === slug);
+  return {
+    newer: i > 0 ? same[i - 1] : null,
+    older: i < same.length - 1 ? same[i + 1] : null,
   };
 }

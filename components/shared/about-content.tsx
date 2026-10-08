@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useLang } from "@/lib/language-context";
+import { Reveal } from "@/components/ui/reveal";
 
 const InfiniteMovingCards = dynamic(() =>
   import("@/components/ui/infinite-moving-cards").then(
@@ -31,7 +32,15 @@ const techItems = [
 
 const timeline = [
   {
-    year: "2025–now",
+    year: "2026.08–now",
+    role: "Google · GenAI FDE",
+    role_zh: "Google · GenAI FDE",
+    detail: "Forward Deployed Engineer, Generative AI",
+    detail_zh: "生成式 AI 前线部署工程师",
+    current: true,
+  },
+  {
+    year: "2025–2026",
     role: "KAWO · AI Engineer",
     role_zh: "KAWO · AI 工程师",
     detail: "Kevin (AI Marketing Agent)",
@@ -102,7 +111,7 @@ export function AboutContent() {
               于是跑去荷兰莱顿大学读了统计学，提前毕业，是那个项目第一个做到的。之后去埃森哲做数据科学顾问，一年升职，带了个 8 人团队，参与了用 AI 数字化纳粹迫害档案的项目——阿罗尔森档案馆 3000 万份文件，全球最大的大屠杀受害者资料库。项目拿了 V360 全球创新奖，还申请了 2 项 NLP 专利。
             </p>
             <p>
-              然后 LLM 爆发了。我回国加入 AI 研究创业公司 txyz.ai（注册用户 50 万+），现在在 KAWO 做 Kevin——一个服务 500+ 全球品牌的 AI 营销 Agent。每天的工作就是在"AI 应该这样"和"它生产环境里偏不这样"之间反复横跳。偶尔也写写这些翻车故事。
+              然后 LLM 爆发了。我回国加入 AI 研究创业公司 txyz.ai（注册用户 50 万+），之后在 KAWO 做 Kevin——一个服务 500+ 全球品牌的 AI 营销 Agent。2026 年 8 月起，我加入 Google 做 GenAI FDE。每天的工作还是在“AI 应该这样”和“它生产环境里偏不这样”之间反复横跳。偶尔也写写这些翻车故事。
             </p>
           </>
         ) : (
@@ -127,11 +136,12 @@ export function AboutContent() {
             </p>
             <p>
               Then large language models happened. I moved back to China, joined an
-              AI research startup (txyz.ai, 500K+ registered users), and now
-              I&apos;m at KAWO building Kevin — an AI marketing agent that serves
-              500+ global enterprise brands. My days are spent in the gap between
-              what AI is supposed to do and what it actually does in production. I
-              write about that gap sometimes.
+              AI research startup (txyz.ai, 500K+ registered users), then built
+              Kevin at KAWO — an AI marketing agent that serves 500+ global
+              enterprise brands. Since August 2026 I&apos;ve been a GenAI Forward
+              Deployed Engineer at Google. My days are still spent in the gap
+              between what AI is supposed to do and what it actually does in
+              production. I write about that gap sometimes.
             </p>
           </>
         )}
@@ -169,26 +179,35 @@ export function AboutContent() {
       <h2 className="mt-16 text-xs font-medium uppercase tracking-[0.2em] text-zinc-500">
         {zh ? "职业经历" : "Career Timeline"}
       </h2>
-      <div className="mt-6 grid gap-0">
-        {timeline.map((item) => (
-          <div
-            key={item.year}
-            className="grid grid-cols-[7rem_1fr] gap-4 py-3 border-b border-zinc-800/40 last:border-0"
-          >
-            <span className="font-mono text-xs text-zinc-600 pt-0.5">
-              {item.year}
+      <ol className="relative mt-8 ml-1.5 border-l border-zinc-800">
+        {timeline.map((item, i) => (
+          <li key={item.year} className="relative pb-8 pl-8 last:pb-0">
+            <span className="absolute -left-[5px] top-1.5 flex h-2.5 w-2.5">
+              {item.current && (
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-60" />
+              )}
+              <span
+                className={`relative inline-flex h-2.5 w-2.5 rounded-full ring-4 ring-zinc-950 ${
+                  item.current ? "bg-sky-400" : "bg-zinc-700"
+                }`}
+              />
             </span>
-            <div>
-              <p className="text-sm text-zinc-200">{zh ? item.role_zh : item.role}</p>
+            <Reveal delay={i * 0.05} y={10}>
+              <p className={`font-mono text-xs ${item.current ? "text-sky-300" : "text-zinc-600"}`}>
+                {item.year}
+              </p>
+              <p className={`mt-1 ${item.current ? "text-base font-medium text-zinc-50" : "text-sm text-zinc-200"}`}>
+                {zh ? item.role_zh : item.role}
+              </p>
               {(zh ? item.detail_zh : item.detail) && (
-                <p className="text-xs text-zinc-500 mt-0.5">
+                <p className="mt-0.5 text-xs text-zinc-500">
                   {zh ? item.detail_zh : item.detail}
                 </p>
               )}
-            </div>
-          </div>
+            </Reveal>
+          </li>
         ))}
-      </div>
+      </ol>
 
       {/* Patents */}
       <h2 className="mt-16 text-xs font-medium uppercase tracking-[0.2em] text-zinc-500">
