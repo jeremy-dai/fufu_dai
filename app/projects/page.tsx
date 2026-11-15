@@ -8,9 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function ProjectsPage() {
-  return (
-    <div className="mx-auto max-w-6xl px-6 sm:px-8 pt-12 sm:pt-16 pb-16">
-      <ProjectsGrid projects={projects} />
-    </div>
-  );
+  return <ProjectsGrid projects={projects} />;
 }

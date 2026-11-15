@@ -1,27 +1,45 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { motion, useScroll, useSpring } from "framer-motion";
 import { LANG_SWITCH_EVENT, type Lang } from "@/lib/language-context";
 
-/** Thin progress bar pinned to the top of the viewport. */
+/** Thin lime scroll progress bar pinned to the top edge of the viewport. */
 export function ReadingProgress() {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 30, restDelta: 0.001 });
+  const barRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const update = () => {
+      const el = barRef.current;
+      if (!el) return;
+      const doc = document.documentElement;
+      const total = doc.scrollHeight - doc.clientHeight;
+      const ratio = total > 0 ? Math.min(1, Math.max(0, window.scrollY / total)) : 0;
+      el.style.transform = `scaleX(${ratio})`;
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
+
   return (
-    <motion.div
+    <div
+      ref={barRef}
       aria-hidden
-      style={{ scaleX }}
-      className="fixed inset-x-0 top-0 z-[60] h-0.5 origin-left bg-gradient-to-r from-sky-400 via-violet-400 to-amber-400"
+      style={{ transform: "scaleX(0)" }}
+      className="fixed inset-x-0 top-0 z-50 h-0.5 origin-left bg-[#E3F96A]"
     />
   );
 }
 
 /**
  * When the user flips the language toggle while reading a post,
- * jump to the translated version instead of leaving them on a
- * page in the "wrong" language.
+ * jump to the other-language version instead of leaving them on a
+ * page in the wrong language.
  */
 export function PostLangSync({
   postLang,

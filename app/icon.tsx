@@ -13,16 +13,16 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0a0a0a",
-          borderRadius: 6,
+          background: "#1A1915",
+          borderRadius: 8,
         }}
       >
         <span
           style={{
-            fontSize: 18,
-            fontWeight: 700,
-            color: "#38bdf8",
-            letterSpacing: -1,
+            fontSize: 17,
+            fontWeight: 800,
+            color: "#E3F96A",
+            letterSpacing: -0.5,
           }}
         >
           JD

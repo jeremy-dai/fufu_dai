@@ -1,63 +1,131 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import type { Project } from "@/lib/projects";
 import { useLang, pick } from "@/lib/language-context";
-import { Reveal } from "@/components/ui/reveal";
-import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 export function ProjectsGrid({ projects }: { projects: Project[] }) {
   const { lang } = useLang();
+  const zh = lang === "zh";
+
+  const bySlug = (s: string) => projects.find((p) => p.slug === s);
+  const arolsen = bySlug("arolsen-archives");
+  const kevin = bySlug("kevin");
+  const hitime = bySlug("hi-time-hi-money");
+  const known = new Set(["arolsen-archives", "kevin", "hi-time-hi-money"]);
+  const extra = projects.filter((p) => !known.has(p.slug));
 
   return (
     <>
-      <h1 className="text-4xl font-semibold tracking-tight text-zinc-100">
-        {lang === "zh" ? "项目" : "Projects"}
-      </h1>
-      <p className="mt-3 text-zinc-400">
-        {lang === "zh" ? "折腾过的东西，有些还活着。" : "Things I've built and contributed to."}
-      </p>
-      <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {projects.map((project, i) => (
-          <Reveal key={project.slug} delay={i * 0.08} className="h-full">
-            <Link href={`/projects/${project.slug}`} className="block h-full">
-              <SpotlightCard className="h-full p-7">
-                <div className="flex h-full flex-col">
-                  <div className="flex items-start justify-between gap-3">
-                    <p className="font-mono text-[11px] uppercase tracking-wider text-zinc-500">
-                      {pick(lang, project.status, project.status_zh)}
-                    </p>
-                    <ArrowUpRight
-                      size={18}
-                      className="shrink-0 text-zinc-600 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-sky-300"
-                    />
-                  </div>
-                  <h2 className="mt-4 text-xl font-semibold text-zinc-100">
-                    {pick(lang, project.title, project.title_zh)}
-                  </h2>
-                  <p className="mt-1 text-sm text-zinc-400">
-                    {pick(lang, project.subtitle, project.subtitle_zh)}
-                  </p>
-                  <p className="mt-4 flex-1 text-sm leading-relaxed text-zinc-500">
-                    {pick(lang, project.description, project.description_zh)}
-                  </p>
-                  <div className="mt-5 flex flex-wrap gap-1.5">
-                    {project.tags.map((t) => (
-                      <span
-                        key={t}
-                        className="rounded-md border border-zinc-800 bg-zinc-900/60 px-2 py-0.5 font-mono text-[11px] text-zinc-400"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
+      {/* ── Page header on canvas ── */}
+      <header className="mb-6 flex flex-col gap-2 px-2 sm:flex-row sm:items-end sm:justify-between">
+        <h1 className="jd-page-title jd-serif">{zh ? "项目" : "Projects"}</h1>
+        <p className="jd-unit">
+          {zh ? "从历史档案馆，到生产环境里的 Agent。" : "From historical archives to production agents."}
+        </p>
+      </header>
+
+      {/* ── Row 1 (7 · 5): Arolsen flagship (glow) + Kevin (orange) / hi-time (lime) ── */}
+      <div className="jd-grid">
+        {arolsen && (
+          <Link href={`/projects/${arolsen.slug}`} className="jd-card jd-glow w7">
+            <div className="jd-top">
+              <span className="jd-lab">{pick(lang, arolsen.status, arolsen.status_zh)}</span>
+              <span className="jd-pill lime">{zh ? "2 项 NLP 专利" : "2 NLP patents"}</span>
+            </div>
+
+            <div>
+              <h2 className="jd-h2 jd-serif">{pick(lang, arolsen.title, arolsen.title_zh)}</h2>
+              <p className="jd-unit mt-1">{pick(lang, arolsen.subtitle, arolsen.subtitle_zh)}</p>
+            </div>
+
+            <div className="mt-2 flex flex-wrap items-end gap-x-10 gap-y-6">
+              <div>
+                <div className="jd-num">40×</div>
+                <span className="jd-unit mt-2 block">{zh ? "档案索引提速" : "Faster indexing"}</span>
+              </div>
+              <div className="jd-race min-w-[260px] flex-1">
+                <span className="who">{zh ? "人工" : "Manual"}</span>
+                <div className="track">
+                  <i className="was" style={{ width: "2.5%" }} />
                 </div>
-              </SpotlightCard>
+                <span className="val">{zh ? "4 份/时" : "4 / hr"}</span>
+                <span className="who">AI</span>
+                <div className="track">
+                  <i className="got" style={{ width: "100%" }} />
+                </div>
+                <span className="val">{zh ? "160 份/时" : "160 / hr"}</span>
+              </div>
+            </div>
+
+            <div className="jd-stats jd-push">
+              <div>
+                <b>160k+</b>
+                <span>{zh ? "姓名已索引" : "Names indexed"}</span>
+              </div>
+              <div>
+                <b>950+</b>
+                <span>{zh ? "志愿者 · 6 大洲" : "Volunteers · 6 continents"}</span>
+              </div>
+              <div>
+                <b>99%</b>
+                <span>{zh ? "「宗教」字段置信度" : "Confidence on 'religion'"}</span>
+              </div>
+            </div>
+          </Link>
+        )}
+
+        <div className="jd-stack w5">
+          {kevin && (
+            <Link href={`/projects/${kevin.slug}`} className="jd-card jd-orange">
+              <div className="jd-top">
+                <span className="jd-pill line">{pick(lang, kevin.status, kevin.status_zh)}</span>
+                <span className="jd-lab">{zh ? "500+ 品牌在用" : "500+ brands"}</span>
+              </div>
+              <div>
+                <h2 className="jd-h2 jd-serif">{pick(lang, kevin.title, kevin.title_zh)}</h2>
+                <p className="jd-unit mt-1">{pick(lang, kevin.subtitle, kevin.subtitle_zh)}</p>
+              </div>
+              <p className="jd-h3 jd-push">
+                {zh ? "“大多数用户把它当会说话的 Excel。”" : "“Most users treat it like a talking Excel.”"}
+              </p>
             </Link>
-          </Reveal>
-        ))}
+          )}
+
+          {hitime && (
+            <Link href={`/projects/${hitime.slug}`} className="jd-card jd-lime">
+              <div className="jd-top">
+                <span className="jd-pill ink">{pick(lang, hitime.status, hitime.status_zh)}</span>
+                <span className="jd-lab">Next.js · Vercel</span>
+              </div>
+              <div>
+                <h2 className="jd-h2 jd-serif">{pick(lang, hitime.title, hitime.title_zh)}</h2>
+                <p className="jd-unit mt-1">{pick(lang, hitime.subtitle, hitime.subtitle_zh)}</p>
+              </div>
+              <div className="jd-push flex items-end gap-4">
+                <div className="jd-num">
+                  7<small>{zh ? "年" : "yrs"}</small>
+                </div>
+                <span className="jd-unit pb-2">
+                  {zh ? "每小时的生活记录，AI 都能读" : "of hourly life logs, readable by any AI"}
+                </span>
+              </div>
+            </Link>
+          )}
+        </div>
       </div>
+
+      {extra.length > 0 && (
+        <div className="jd-grid">
+          {extra.map((p) => (
+            <Link key={p.slug} href={`/projects/${p.slug}`} className="jd-card jd-dark w4">
+              <span className="jd-lab">{pick(lang, p.status, p.status_zh)}</span>
+              <h2 className="jd-h3 jd-serif">{pick(lang, p.title, p.title_zh)}</h2>
+              <p className="jd-unit jd-push">{pick(lang, p.description, p.description_zh)}</p>
+            </Link>
+          ))}
+        </div>
+      )}
     </>
   );
 }

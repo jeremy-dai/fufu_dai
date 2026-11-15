@@ -2,7 +2,16 @@
 
 ## Project Overview
 
-Personal portfolio website built with Next.js. Includes blog, projects, and internationalization (zh/en).
+Personal website (`fufu.dev`) built with Next.js, covering bilingual (`zh`/`en`) essays and projects.
+
+## Design
+
+Information hierarchy and visual style follow [`jeremy-info-design`](~/.gemini/config/skills/jeremy-info-design/SKILL.md) and [`jeremy-visual-style`](~/.gemini/config/skills/jeremy-visual-style/SKILL.md). Only rules specific to this repository are listed below:
+
+- **Layout & color:** Every page uses the full `1440px` shell with uneven bento rows (`8·4`, `7·5`, `9·3`). Where a screen's content supports them, cream, one lime card (the main point) and one orange card (a short statement) show up as whole cards—never pull a conversational joke or sentence out of narrative prose onto a standalone orange card out of context; the single `.jd-glow` card holds one number. A project's headline number sits inside that project's own card, never in a separate card. Long prose (MDX posts, the About story, project case studies) sits directly on the `#1A1915` canvas beside the cards, never inside one.
+- **Heading scale & bilingual typography (`zh`/`en`):** Card hero titles use `.jd-h1` (`44–72px`); the hero names the subject (e.g. the person on About), not a bare section label. Short 2–4 word titles use `.jd-serif` (`Fraunces` + `Noto Serif SC`); full-sentence headlines—including all blog post titles, quotes, and MDX subheadings—stay in the sans stack (`Outfit` + `Noto Sans SC`). `JetBrains Mono` is reserved for code in MDX.
+- **Responsive public layout:** Unlike fixed-width 1440px static artifacts that zoom-scale (`data-fit`), `.jd-grid` uses 12 columns at `>=960px` inside a `1440px` shell and collapses cards cleanly to a single column on narrow phone screens without horizontal scroll.
+- **Token hygiene:** All theme CSS custom properties in `app/globals.css` carry the `--jd-` prefix, with surface-scoped contrast variables (`--jd-m`, `--jd-l`, `--jd-fill`, `--jd-on-fill`, `--jd-hi`) re-declared on `.jd-dark`/`.jd-glow`, `.jd-cream`/`.jd-cream2`/`.jd-lime`, and `.jd-orange`.
 
 ## Blog Posts
 

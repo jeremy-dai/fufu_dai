@@ -19,7 +19,7 @@ const socials = [
 
 export function SocialLinks({ className }: { className?: string }) {
   return (
-    <div className={cn("flex items-center gap-1", className)}>
+    <div className={cn("flex items-center gap-1.5", className)}>
       {socials.map(({ label, href, icon: Icon }) => {
         const external = href.startsWith("http");
         return (
@@ -29,9 +29,9 @@ export function SocialLinks({ className }: { className?: string }) {
             aria-label={label}
             title={label}
             {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-            className="rounded-lg p-2 text-zinc-500 transition-all hover:-translate-y-0.5 hover:bg-zinc-800/60 hover:text-zinc-100"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(245,240,228,0.14)] text-[rgba(245,240,228,0.62)] transition-colors hover:border-[rgba(245,240,228,0.45)] hover:text-[#F5F0E4]"
           >
-            <Icon size={17} />
+            <Icon size={15} />
           </a>
         );
       })}

@@ -1,28 +1,55 @@
-import type { Metadata } from "next";
-import { JetBrains_Mono, Inter, Noto_Sans_SC } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import {
+  Fraunces,
+  JetBrains_Mono,
+  Noto_Sans_SC,
+  Noto_Serif_SC,
+  Outfit,
+} from "next/font/google";
 import { personJsonLd } from "@/lib/jsonld";
 import { LanguageProvider } from "@/lib/language-context";
 import { SiteNav } from "@/components/shared/site-nav";
 import { SiteFooter } from "@/components/shared/site-footer";
-import { MotionProvider } from "@/components/shared/motion-provider";
-import { AuroraBackground } from "@/components/ui/aurora-background";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-sans-main",
+const fraunces = Fraunces({
+  variable: "--jd-font-serif-en",
   subsets: ["latin"],
+  axes: ["SOFT", "WONK", "opsz"],
+  display: "swap",
 });
 
-const jetbrains = JetBrains_Mono({
-  variable: "--font-mono-main",
+const notoSerifSC = Noto_Serif_SC({
+  variable: "--jd-font-serif-zh",
   subsets: ["latin"],
+  weight: ["700", "900"],
+  preload: false,
+  display: "swap",
+});
+
+const outfit = Outfit({
+  variable: "--jd-font-sans-en",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 const notoSansSC = Noto_Sans_SC({
-  variable: "--font-noto-sc",
+  variable: "--jd-font-sans-zh",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
+  preload: false,
+  display: "swap",
 });
+
+const jetbrains = JetBrains_Mono({
+  variable: "--jd-font-mono",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+export const viewport: Viewport = {
+  themeColor: "#1A1915",
+};
 
 export const metadata: Metadata = {
   title: {
@@ -56,21 +83,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body
-        className={`${inter.variable} ${jetbrains.variable} ${notoSansSC.variable} font-sans antialiased`}
-      >
+    <html
+      lang="en"
+      className={`${fraunces.variable} ${notoSerifSC.variable} ${outfit.variable} ${notoSansSC.variable} ${jetbrains.variable}`}
+    >
+      <body>
         <LanguageProvider>
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd()) }}
           />
-          <MotionProvider>
-            <AuroraBackground />
+          <div className="jd-shell">
             <SiteNav />
-            <main className="min-h-screen">{children}</main>
+            <main>{children}</main>
             <SiteFooter />
-          </MotionProvider>
+          </div>
         </LanguageProvider>
       </body>
     </html>

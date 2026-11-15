@@ -53,10 +53,9 @@ export async function generateMetadata({
 const t = {
   back: { en: "All posts", zh: "全部文章" },
   toc: { en: "On this page", zh: "目录" },
-  translation: { en: "阅读中文版", zh: "Read in English" },
-  newer: { en: "Newer", zh: "较新" },
-  older: { en: "Older", zh: "较早" },
-  more: { en: "Keep reading", zh: "继续阅读" },
+  translation: { en: "中文版", zh: "Read in English" },
+  newer: { en: "Newer post", zh: "较新一篇" },
+  older: { en: "Older post", zh: "较早一篇" },
 };
 
 function NeighborCard({
@@ -71,18 +70,15 @@ function NeighborCard({
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className={`group flex flex-col gap-2 rounded-2xl border border-zinc-800/70 bg-zinc-900/40 p-5 transition-colors hover:border-zinc-700 hover:bg-zinc-900/70 ${
-        align === "right" ? "sm:items-end sm:text-right" : ""
-      }`}
+      className={`jd-card jd-dark w6 ${align === "right" ? "lg:items-end lg:text-right" : ""}`}
     >
-      <span className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-zinc-500">
-        {align === "left" && <ArrowLeft size={12} className="transition-transform group-hover:-translate-x-0.5" />}
+      <span className="jd-lab inline-flex items-center gap-1.5">
+        {align === "left" && <ArrowLeft size={13} />}
         {label}
-        {align === "right" && <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />}
+        {align === "right" && <ArrowRight size={13} />}
       </span>
-      <span className="font-medium leading-snug text-zinc-200 transition-colors group-hover:text-sky-300">
-        {post.title}
-      </span>
+      <span className="text-lg font-semibold leading-snug">{post.title}</span>
+      <span className="jd-lab jd-push">{post.date}</span>
     </Link>
   );
 }
@@ -112,7 +108,7 @@ export default async function BlogPostPage({
   });
 
   return (
-    <div className="mx-auto max-w-6xl px-6 pt-10 pb-24 sm:px-8">
+    <>
       <ReadingProgress />
       <PostLangSync postLang={lang} translationSlug={translation} />
       <script
@@ -120,72 +116,82 @@ export default async function BlogPostPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="flex gap-16">
-        <article className="min-w-0 max-w-3xl flex-1">
-          <Link
-            href="/blog"
-            className="group inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors hover:text-zinc-200"
-          >
-            <ArrowLeft size={14} className="transition-transform group-hover:-translate-x-0.5" />
-            {t.back[lang]}
-          </Link>
+      <div className="jd-grid pt-2">
+        {/* ── Left Rail (Report TOC) ── */}
+        <aside className="jd-rail hidden w3 lg:flex">
+          <div className="jd-card jd-dark jd-toc w-full">
+            <div className="mb-4 flex flex-wrap items-center gap-2">
+              <Link href="/blog" className="jd-chip">
+                <ArrowLeft size={13} />
+                {t.back[lang]}
+              </Link>
+              {translation && (
+                <Link href={`/blog/${translation}`} className="jd-chip">
+                  <Languages size={13} />
+                  {t.translation[lang]}
+                </Link>
+              )}
+            </div>
+            <TableOfContents headings={headings} title={t.toc[lang]} />
+          </div>
+        </aside>
 
-          <header className="mt-8 border-b border-zinc-800/60 pb-8">
-            <div className="flex flex-wrap gap-1.5">
+        {/* ── Right Prose (directly on warm ink canvas) ── */}
+        <article className="w9 min-w-0 lg:pl-4">
+          <div className="mb-6 flex flex-wrap items-center gap-2 lg:hidden">
+            <Link href="/blog" className="jd-chip">
+              <ArrowLeft size={13} />
+              {t.back[lang]}
+            </Link>
+            {translation && (
+              <Link href={`/blog/${translation}`} className="jd-chip">
+                <Languages size={13} />
+                {t.translation[lang]}
+              </Link>
+            )}
+          </div>
+
+          <header className="border-b border-[rgba(245,240,228,0.14)] pb-8">
+            <div className="jd-row">
+              <span className="jd-pill lime">{post.meta.date}</span>
               {post.meta.tags.map((tag) => (
                 <Link
                   key={tag}
                   href={`/blog?tag=${encodeURIComponent(tag)}`}
-                  className="rounded-full border border-zinc-800 bg-zinc-900/60 px-2.5 py-0.5 font-mono text-[11px] text-zinc-400 transition-colors hover:border-zinc-600 hover:text-zinc-100"
+                  className="jd-pill line hover:border-[rgba(245,240,228,0.4)] hover:text-[#F5F0E4]"
                 >
                   {tag}
                 </Link>
               ))}
+              <span className="jd-lab">{post.meta.readingTime}</span>
             </div>
-            <h1 className="mt-5 text-3xl font-semibold leading-tight tracking-tight text-zinc-50 sm:text-[2.6rem]">
-              {post.meta.title}
-            </h1>
+
+            <h1 className="jd-article-title mt-6">{post.meta.title}</h1>
             {post.meta.description && (
-              <p className="mt-4 text-lg leading-relaxed text-zinc-400">{post.meta.description}</p>
+              <p className="jd-article-intro">{post.meta.description}</p>
             )}
-            <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-xs text-zinc-500">
-              <time dateTime={post.meta.date}>{post.meta.date}</time>
-              <span className="text-zinc-700">/</span>
-              <span>{post.meta.readingTime}</span>
-              {translation && (
-                <>
-                  <span className="text-zinc-700">/</span>
-                  <Link
-                    href={`/blog/${translation}`}
-                    className="inline-flex items-center gap-1 text-zinc-400 transition-colors hover:text-sky-300"
-                  >
-                    <Languages size={13} />
-                    {t.translation[lang]}
-                  </Link>
-                </>
-              )}
-            </div>
           </header>
 
-          <div className="mt-10">
+          <div className="mt-10 pb-12">
             <MDXContent Component={MDXComponent} />
           </div>
 
           {(newer || older) && (
-            <nav className="mt-20 border-t border-zinc-800/60 pt-10">
-              <p className="mb-5 font-mono text-xs tracking-wider text-accent">{t.more[lang]}</p>
-              <div className="grid gap-4 sm:grid-cols-2">
-                {older ? <NeighborCard post={older} label={t.older[lang]} align="left" /> : <span />}
-                {newer && <NeighborCard post={newer} label={t.newer[lang]} align="right" />}
-              </div>
+            <nav className="jd-grid mt-6" aria-label="Adjacent posts">
+              {older ? (
+                <NeighborCard post={older} label={t.older[lang]} align="left" />
+              ) : (
+                <div className="hidden w6 lg:block" />
+              )}
+              {newer ? (
+                <NeighborCard post={newer} label={t.newer[lang]} align="right" />
+              ) : (
+                <div className="hidden w6 lg:block" />
+              )}
             </nav>
           )}
         </article>
-
-        <aside className="hidden w-60 shrink-0 pt-28 xl:block">
-          <TableOfContents headings={headings} title={t.toc[lang]} />
-        </aside>
       </div>
-    </div>
+    </>
   );
 }
