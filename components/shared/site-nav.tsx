@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLang } from "@/lib/language-context";
@@ -21,6 +22,7 @@ export function SiteNav() {
   return (
     <header className="jd-bar">
       <Link href="/" className="jd-brand">
+        <Image src="/mark.svg" width={30} height={30} alt="" className="jd-brand-mark" />
         Jeremy Dai
       </Link>
 

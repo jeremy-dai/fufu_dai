@@ -138,6 +138,17 @@ strong {
   border-color: var(--jd-m);
 }
 
+.jd-brand:has(.jd-brand-mark) {
+  padding-left: 6px;
+  gap: 10px;
+}
+
+.jd-brand-mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+}
+
 .jd-nav {
   display: flex;
   align-items: center;
