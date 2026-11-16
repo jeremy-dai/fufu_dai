@@ -7,3 +7,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Lockfile
+
+Every `resolved` URL in `package-lock.json` must start with `https://registry.npmjs.org/`; Vercel cannot reach any other registry. After changing dependencies, check this before committing and rewrite any other host to `registry.npmjs.org` (the `integrity` hash stays the same).
